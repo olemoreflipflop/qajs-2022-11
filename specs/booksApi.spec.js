@@ -9,11 +9,11 @@ describe("bookstore books API tests", () => {
     const booksData = [
         {
             isbn: "9781593277574",
-            name: "Understanding ECMAScript 6"
+            title: "Understanding ECMAScript 6"
         },
         {
             isbn: "9781449337711",
-            name: "Designing Evolvable Web APIs with ASP.NET"
+            title: "Designing Evolvable Web APIs with ASP.NET"
         }
     ];
 
@@ -187,10 +187,10 @@ describe("bookstore books API tests", () => {
         expect(res.status).toEqual(401);
     });
 
-    it.each(booksData)(`GET /bookStore/v1/book - Get book ($isbn) info (200)`, async ({ isbn, name }) => {
+    it.each(booksData)(`GET /bookStore/v1/book - Get book ($isbn) info (200)`, async ({ isbn, title }) => {
         const res = await bookstore.getBookInfo(isbn);
         expect(res.status).toEqual(200);
-        expect(res.body.title).toEqual(name);
+        expect(res.body.title).toEqual(title);
     });
 
     it("GET /bookStore/v1/book - ISBN not exists (400)", async () => {
