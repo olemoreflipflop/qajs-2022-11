@@ -6,9 +6,16 @@ import createBooksCollection from "./framework/fixtures/helpers";
 describe("bookstore books API tests", () => {
     const { booksCredentials } = config;
     let userData;
-    const ISBNs = ["9781593277574", "9781449337711", "a781449325862", ""];
-    const books = [{ isbn: ISBNs[0], name: "Understanding ECMAScript 6" },
-    { isbn: ISBNs[1], name: "Designing Evolvable Web APIs with ASP.NET" }];
+    const booksData = [
+        {
+            isbn: "9781593277574",
+            name: "Understanding ECMAScript 6"
+        },
+        {
+            isbn: "9781449337711",
+            name: "Designing Evolvable Web APIs with ASP.NET"
+        }
+    ];
 
     beforeAll(async () => {
         userData = await account.createUserWithToken(booksCredentials);
@@ -19,17 +26,17 @@ describe("bookstore books API tests", () => {
     });
 
     it("POST /bookStore/v1/books - Create books list(201)", async () => {
-        const booksCollection = createBooksCollection([ISBNs[0]])
+        const booksCollection = createBooksCollection([booksData[0].isbn])
 
         const res = await bookstore.addListOfBooks(userData.uuid, userData.token, booksCollection);
         expect(res.status).toEqual(201);
-        expect(res.body).toEqual({ books: booksCollection });
+        expect(res.body.books).toEqual(booksCollection);
 
         await bookstore.deleteBooksList(userData.uuid, userData.token);
     });
 
     it("POST /bookStore/v1/books - Create books list, Unauthorized(401)", async () => {
-        const booksCollection = createBooksCollection([ISBNs[0]])
+        const booksCollection = createBooksCollection([booksData[0].isbn])
 
         const res = await bookstore.addListOfBooks(userData.uuid, "", booksCollection);
         expect(res.status).toEqual(401);
@@ -47,7 +54,7 @@ describe("bookstore books API tests", () => {
     });
 
     it("POST /bookStore/v1/books - Create books list, ISBN is already in the list(400)", async () => {
-        const booksCollection = createBooksCollection([ISBNs[0]])
+        const booksCollection = createBooksCollection([booksData[0].isbn])
 
         await bookstore.addListOfBooks(userData.uuid, userData.token, booksCollection);
         const res = await bookstore.addListOfBooks(userData.uuid, userData.token, booksCollection);
@@ -59,7 +66,7 @@ describe("bookstore books API tests", () => {
     });
 
     it("POST /bookStore/v1/books - Create books list, ISBN not exists(400)", async () => {
-        const booksCollection = createBooksCollection([ISBNs[2]])
+        const booksCollection = createBooksCollection(["isbn"])
 
         const res = await bookstore.addListOfBooks(userData.uuid, userData.token, booksCollection);
         expect(res.status).toEqual(400);
@@ -70,32 +77,32 @@ describe("bookstore books API tests", () => {
     });
 
     it("PUT /bookStore/v1/books/{ISBN} - Update book (200)", async () => {
-        const booksCollection = createBooksCollection([ISBNs[1]])
+        const booksCollection = createBooksCollection([booksData[1].isbn])
         const payload =
         {
             userId: userData.uuid,
-            isbn: ISBNs[0]
+            isbn: booksData[0].isbn
         };
 
         await bookstore.addListOfBooks(userData.uuid, userData.token, booksCollection);
-        const res = await bookstore.updateBook(payload, userData.token, ISBNs[1]);
+        const res = await bookstore.updateBook(payload, userData.token, booksData[1].isbn);
         expect(res.status).toEqual(200);
-        expect(res.body.books.find((book) => book.isbn === ISBNs[1])).toBeUndefined()
-        expect(res.body.books.find((book) => book.isbn === ISBNs[0])).toBeTruthy();
+        expect(res.body.books.find((book) => book.isbn === booksData[1].isbn)).toBeUndefined()
+        expect(res.body.books.find((book) => book.isbn === booksData[0].isbn)).toBeTruthy();
 
         await bookstore.deleteBooksList(userData.uuid, userData.token);
     });
 
     it("PUT /bookStore/v1/books/{ISBN} - Can't update book (400)", async () => {
-        const booksCollection = createBooksCollection([ISBNs[1]])
+        const booksCollection = createBooksCollection([booksData[1].isbn])
         const payload =
         {
             userId: userData.uuid,
-            isbn: ISBNs[1]
+            isbn: booksData[1].isbn
         };
 
         await bookstore.addListOfBooks(userData.uuid, userData.token, booksCollection);
-        const res = await bookstore.updateBook(payload, userData.token, ISBNs[1]);
+        const res = await bookstore.updateBook(payload, userData.token, booksData[1].isbn);
         console.log(res.status, res.body);
         expect(res.status).toEqual(400);
         expect(res.body).toEqual({
@@ -105,29 +112,25 @@ describe("bookstore books API tests", () => {
     });
 
     it("PUT /bookStore/v1/books/{ISBN} - User not authorized (401)", async () => {
-        const booksCollection = createBooksCollection([ISBNs[1]])
         const payload =
         {
             userId: userData.uuid,
-            isbn: ISBNs[1]
+            isbn: booksData[1].isbn
         };
 
-        await bookstore.addListOfBooks(userData.uuid, userData.token, booksCollection);
-        const res = await bookstore.updateBook(payload, '', ISBNs[1]);
+        const res = await bookstore.updateBook(payload, '', booksData[1].isbn);
         console.log(res.status, res.body);
         expect(res.status).toEqual(401);
     });
 
     it("PUT /bookStore/v1/books/{ISBN} - ISBN not exists (400)", async () => {
-        const booksCollection = createBooksCollection([ISBNs[1]])
         const payload =
         {
             userId: userData.uuid,
-            isbn: ISBNs[2]
+            isbn: "isbn"
         };
 
-        await bookstore.addListOfBooks(userData.uuid, userData.token, booksCollection);
-        const res = await bookstore.updateBook(payload, userData.token, ISBNs[1]);
+        const res = await bookstore.updateBook(payload, userData.token, booksData[1].isbn);
         console.log(res.status, res.body);
         expect(res.status).toEqual(400);
         expect(res.body).toEqual({
@@ -139,13 +142,13 @@ describe("bookstore books API tests", () => {
     it("DELETE /bookStore/v1/book - Delete book (200)", async () => {
         const booksCollection = [
             {
-                isbn: ISBNs[1]
+                isbn: booksData[1].isbn
             },
         ];
         const payload =
         {
             userId: userData.uuid,
-            isbn: ISBNs[1]
+            isbn: booksData[1].isbn
         };
         await bookstore.addListOfBooks(userData.uuid, userData.token, booksCollection);
         const res = await bookstore.deleteBook(payload, userData.token);
@@ -156,17 +159,16 @@ describe("bookstore books API tests", () => {
     it("DELETE /bookStore/v1/book - Book is not in the list (400)", async () => {
         const booksCollection = [
             {
-                isbn: ISBNs[1]
+                isbn: booksData[1].isbn
             },
         ];
         const payload =
         {
             userId: userData.uuid,
-            isbn: ISBNs[0]
+            isbn: booksData[0].isbn
         };
         await bookstore.addListOfBooks(userData.uuid, userData.token, booksCollection);
         const res = await bookstore.deleteBook(payload, userData.token);
-        // console.log(res);
         expect(res.status).toEqual(400);
         expect(res.body).toEqual({
             code: '1206',
@@ -175,26 +177,24 @@ describe("bookstore books API tests", () => {
     });
 
     it("DELETE /bookStore/v1/book - User not authorized (401)", async () => {
-        const booksCollection = createBooksCollection([ISBNs[1]])
         const payload =
         {
             userId: userData.uuid,
-            isbn: ISBNs[1]
+            isbn: booksData[1].isbn
         };
 
-        await bookstore.addListOfBooks(userData.uuid, userData.token, booksCollection);
         const res = await bookstore.deleteBook(payload, "");
         expect(res.status).toEqual(401);
     });
 
-    it.each(books)(`GET /bookStore/v1/book - Get book ($isbn) info (200)`, async ({ isbn, name }) => {
+    it.each(booksData)(`GET /bookStore/v1/book - Get book ($isbn) info (200)`, async ({ isbn, name }) => {
         const res = await bookstore.getBookInfo(isbn);
         expect(res.status).toEqual(200);
         expect(res.body.title).toEqual(name);
     });
 
     it("GET /bookStore/v1/book - ISBN not exists (400)", async () => {
-        const res = await bookstore.getBookInfo(ISBNs[3]);
+        const res = await bookstore.getBookInfo("isbn");
         expect(res.status).toEqual(400);
         expect(res.body).toEqual({
             code: '1205',
