@@ -2,6 +2,14 @@ import bookstore from "./framework/services/bookstore";
 import account from "./framework/services/user";
 import createBooksCollection from "./framework/utils/helpers";
 import { createUser } from "./framework/utils/generators";
+import { matchers } from 'jest-json-schema';
+expect.extend(matchers);
+
+// можно так же использовать: 
+// import Ajv from 'ajv'
+// import addFormats from "ajv-formats"
+// const ajv = new Ajv()
+// addFormats(ajv)
 
 describe("books API tests", () => {
     let userData;
@@ -192,10 +200,36 @@ describe("books API tests", () => {
     })
 
     describe("GET /bookStore/v1/book", () => {
+
+        //декларативный подход с использованием схемы
+        // все ключи обязательны
+        // нет лишних ключей
+        // все значения нужного типа данных
+        //https://ajv.js.org/guide/formats.html
+        //check joi?
+
+        const schema = {
+            type: "object",
+            required: ["isbn", "title", "author", "publish_date", "publisher", "pages", "description", "website"],
+            additionalProperties: false,
+            properties: {
+                isbn: { type: "string" },
+                title: { type: "string" },
+                subTitle: { type: "string" },
+                author: { type: "string" },
+                publish_date: { type: "string", format: "date-time" },
+                publisher: { type: "string" },
+                pages: { type: "number" },
+                description: { type: "string" },
+                website: { type: "string", format: "uri" }
+            }
+        }
+
         it.each(booksData)(`Gets book ($isbn) info (200)`, async ({ isbn, title }) => {
             const res = await bookstore.getBookInfo(isbn);
             expect(res.status).toEqual(200);
             expect(res.body.title).toEqual(title);
+            expect(res.body).toMatchSchema(schema)
         });
 
         it("Doesn't get books info if ISBN not exists (400)", async () => {
