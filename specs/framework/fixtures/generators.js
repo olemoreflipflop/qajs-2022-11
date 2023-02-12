@@ -7,4 +7,4 @@ function getRandomString(n) {
     return token;
 }
 
-export default generateToken
+export default getRandomString
