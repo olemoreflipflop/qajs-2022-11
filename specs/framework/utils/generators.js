@@ -1,4 +1,3 @@
-// функция создает объект юзер
 import { faker } from '@faker-js/faker';
 
 export function createUser() {

@@ -26,6 +26,7 @@
     "babel-jest": "^29.3.1",
     "dotenv": "^8.6.0",
     "jest": "^29.3.1",
-    "supertest": "^6.2.4"
+    "supertest": "^6.2.4",
+    "jest-json-schema": "^6.1.0"
   }
 }

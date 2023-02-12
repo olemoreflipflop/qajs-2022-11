@@ -71,7 +71,7 @@ describe("User API tests", () => {
 
     it("Doesn't delete user with invalid token(401)", async () => {
       const res = await account.deleteUser(userData.uuid, "");
-      console.log(res.body)
+
       expect(res.status).toEqual(401);
       expect(res.body).toEqual({ code: "1200", message: "User not authorized!" });
     });
@@ -108,7 +108,6 @@ describe("User API tests", () => {
     it("Authorizes user with valid credentials(200)", async () => {
       // console.log(credentials.toString('ascii'));
       const res = await account.authorized(credentials);
-      console.log(res.body);
 
       expect(res.status).toEqual(200);
       expect(res.body).toEqual(true);
@@ -148,19 +147,21 @@ describe("User API tests", () => {
 
     it("Gets user info if credentials are valid(200)", async () => {
       const res = await account.userInfo(userData.uuid, userData.token);
-      console.log(res.body)
+
       expect(res.status).toEqual(200);
       expect(res.body.username).toEqual(user.userName);
     });
 
     it("Doesn't get user info if used invalid UUID(401)", async () => {
       const res = await account.userInfo("123", userData.token);
+
       expect(res.status).toEqual(401);
       expect(res.body).toEqual({ code: "1207", message: "User not found!" });
     });
 
     it("Doesn't get user info if used invalid token(401)", async () => {
       const res = await account.userInfo(userData.uuid, "");
+
       expect(res.status).toEqual(401);
       expect(res.body).toEqual({ code: "1200", message: "User not authorized!" });
     });
