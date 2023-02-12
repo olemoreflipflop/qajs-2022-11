@@ -156,7 +156,7 @@ describe("bookstore books API tests", () => {
         expect(res.body).toEqual({});
     });
 
-    it("DELETE /bookStore/v1/book - Book is not in the list (400)", async () => {
+    it("DELETE /bookStore/v1/book - Book is not in the list(400)", async () => {
         const booksCollection = [
             {
                 isbn: booksData[1].isbn
