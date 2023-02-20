@@ -50,6 +50,21 @@ jobs:
         if-no-files-found: error
         path: ./allure-report
       continue-on-error: true
+    
+    - name: Upload junit report
+      uses: actions/upload-artifact@v3
+      with:
+        name: junit
+        if-no-files-found: error
+        path: ./
+      continue-on-error: true
+
+    - name: Publish Test Results
+      uses: EnricoMi/publish-unit-test-result-action@v2
+      if: always()
+      with:
+        files: |
+          junit.xml
 
     - name: Deploy
       uses: JamesIves/github-pages-deploy-action@v4
