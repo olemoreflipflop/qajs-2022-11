@@ -6,8 +6,6 @@ name: Node.js CI
 on:
   push:
     branches: [ "develop", "main" ]
-  pull_request:
-    branches: [ "develop", "main" ]
 
 jobs:
   all-tests:
@@ -56,7 +54,7 @@ jobs:
       with:
         name: junit
         if-no-files-found: error
-        path: ./
+        path: ./junit-reports/junit.xml
       continue-on-error: true
 
     - name: Publish Test Results
@@ -64,7 +62,7 @@ jobs:
       if: always()
       with:
         files: |
-          junit.xml
+          junit-reports/junit.xml
 
     - name: Deploy
       uses: JamesIves/github-pages-deploy-action@v4
