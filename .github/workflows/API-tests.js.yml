@@ -6,8 +6,6 @@ name: Node.js CI
 on:
   push:
     branches: [ "develop", "main" ]
-  pull_request:
-    branches: [ "develop", "main" ]
 
 jobs:
   all-tests:
@@ -17,12 +15,12 @@ jobs:
     strategy:
       matrix:
         node-version: [18.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
         
     env:
       BASE_URL: ${{ secrets.BASE_URL }}
-      CREDENTIALS: ${{ secrets.CREDENTIALS }}
-      
+      TEST_LOGIN: ${{ secrets.TEST_LOGIN }}
+      TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
+
     steps:
     - uses: actions/checkout@v3
 
@@ -31,29 +29,17 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
-    
-    - name: Check env
-      run: echo '${{ env.BASE_URL }}'
         
     - name: Install deps
       run: npm ci
     
     - name: Run tests
-      run: npm test
+      run: npm run test
       continue-on-error: true
-      
+
     - name: Create allure report
       run: npm run report
       continue-on-error: true
-
-    - name: Upload jest report
-      uses: actions/upload-artifact@v3
-      with:
-        name: report
-        if-no-files-found: error
-        path: ./jest-html-report
-      continue-on-error: true
-
 
     - name: Upload allure report
       uses: actions/upload-artifact@v3
@@ -61,6 +47,44 @@ jobs:
         name: allure-report
         if-no-files-found: error
         path: ./allure-report
+      continue-on-error: true
+    
+    - name: Upload junit report
+      uses: actions/upload-artifact@v3
+      with:
+        name: junit
+        if-no-files-found: error
+        path: ./junit-reports/junit.xml
+      continue-on-error: true
+
+    - name: Publish Test Results
+      uses: EnricoMi/publish-unit-test-result-action@v2
+      if: always()
+      with:
+        files: |
+          junit-reports/junit.xml
+
+    - name: Deploy
+      uses: JamesIves/github-pages-deploy-action@v4
+      with:
+        folder: allure-report
+        clean: true
+        token: ${{ secrets.TOKEN }}
+      continue-on-error: true
+
+    - name: Send telegram notification
+      uses: appleboy/telegram-action@master
+      with:
+        to: ${{ secrets.TELEGRAM_TO }}
+        token: ${{ secrets.TELEGRAM_TOKEN }}
+        message: |
+          ${{ github.actor }} created commit:
+          Repository: ${{ github.repository }}
+          Commit: https://github.com/${{ github.repository }}/commit/${{github.sha}}
+
+          Run:  https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
+
+          Check allure test report: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/
       continue-on-error: true
 
 

@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="jest tests" tests="36" failures="0" errors="0" time="7.777">
+  <testsuite name="POST /account/v1/user" errors="0" failures="0" skipped="0" timestamp="2023-02-20T10:40:03" time="6.751" tests="15">
+    <testcase classname="POST /account/v1/user  Creates user, valid password(201)" name="POST /account/v1/user  Creates user, valid password(201)" time="0.992">
+    </testcase>
+    <testcase classname="POST /account/v1/user  Doesn&apos;t create user, User exists(406)" name="POST /account/v1/user  Doesn&apos;t create user, User exists(406)" time="0.175">
+    </testcase>
+    <testcase classname="POST /account/v1/user  Doesn&apos;t create user, Invalid password(400)" name="POST /account/v1/user  Doesn&apos;t create user, Invalid password(400)" time="0.14">
+    </testcase>
+    <testcase classname="POST /account/v1/user  Doesn&apos;t create user, Short password(400)" name="POST /account/v1/user  Doesn&apos;t create user, Short password(400)" time="0.146">
+    </testcase>
+    <testcase classname="DELETE /account/v1/user/{uuid}  Doesn&apos;t delete user with invalid token(401)" name="DELETE /account/v1/user/{uuid}  Doesn&apos;t delete user with invalid token(401)" time="0.152">
+    </testcase>
+    <testcase classname="DELETE /account/v1/user/{uuid}  Doesn&apos;t delete user with invalid user UUID(200)" name="DELETE /account/v1/user/{uuid}  Doesn&apos;t delete user with invalid user UUID(200)" time="0.141">
+    </testcase>
+    <testcase classname="DELETE /account/v1/user/{uuid}  Deletes user with valid UUID &amp; token(200)" name="DELETE /account/v1/user/{uuid}  Deletes user with valid UUID &amp; token(200)" time="0.264">
+    </testcase>
+    <testcase classname="POST /account/v1/authorized  Doesn&apos;t auth user if user doesn&apos;t exists(404)" name="POST /account/v1/authorized  Doesn&apos;t auth user if user doesn&apos;t exists(404)" time="0.237">
+    </testcase>
+    <testcase classname="POST /account/v1/authorized  Doesn&apos;t auth user, empty payload(400)" name="POST /account/v1/authorized  Doesn&apos;t auth user, empty payload(400)" time="0.135">
+    </testcase>
+    <testcase classname="POST /account/v1/authorized  Authorizes user with valid credentials(200)" name="POST /account/v1/authorized  Authorizes user with valid credentials(200)" time="0.155">
+    </testcase>
+    <testcase classname="POST /account/v1/generatetoken  Generates new token, User exists(200)" name="POST /account/v1/generatetoken  Generates new token, User exists(200)" time="0.374">
+    </testcase>
+    <testcase classname="POST /account/v1/generatetoken  Doesn&apos;t generates token if user doesn&apos;t exists(200)" name="POST /account/v1/generatetoken  Doesn&apos;t generates token if user doesn&apos;t exists(200)" time="0.338">
+    </testcase>
+    <testcase classname="GET /account/v1/user/{ uuid }  Gets user info if credentials are valid(200)" name="GET /account/v1/user/{ uuid }  Gets user info if credentials are valid(200)" time="0.149">
+    </testcase>
+    <testcase classname="GET /account/v1/user/{ uuid }  Doesn&apos;t get user info if used invalid UUID(401)" name="GET /account/v1/user/{ uuid }  Doesn&apos;t get user info if used invalid UUID(401)" time="0.132">
+    </testcase>
+    <testcase classname="GET /account/v1/user/{ uuid }  Doesn&apos;t get user info if used invalid token(401)" name="GET /account/v1/user/{ uuid }  Doesn&apos;t get user info if used invalid token(401)" time="0.149">
+    </testcase>
+  </testsuite>
+  <testsuite name="POST /bookStore/v1/books" errors="0" failures="0" skipped="0" timestamp="2023-02-20T10:40:03" time="7.58" tests="21">
+    <testcase classname="POST /bookStore/v1/books  Creates books list(201)" name="POST /bookStore/v1/books  Creates books list(201)" time="0.354">
+    </testcase>
+    <testcase classname="POST /bookStore/v1/books  Doesn&apos;t create list if Unauthorized(401)" name="POST /bookStore/v1/books  Doesn&apos;t create list if Unauthorized(401)" time="0.158">
+    </testcase>
+    <testcase classname="POST /bookStore/v1/books  Doesn&apos;t create list if list empty(400)" name="POST /bookStore/v1/books  Doesn&apos;t create list if list empty(400)" time="0.143">
+    </testcase>
+    <testcase classname="POST /bookStore/v1/books  Doesn&apos;t create list if ISBN is already in the list(400)" name="POST /bookStore/v1/books  Doesn&apos;t create list if ISBN is already in the list(400)" time="0.33">
+    </testcase>
+    <testcase classname="POST /bookStore/v1/books  Doesn&apos;t create list if ISBN not exists(400)" name="POST /bookStore/v1/books  Doesn&apos;t create list if ISBN not exists(400)" time="0.155">
+    </testcase>
+    <testcase classname="PUT /bookStore/v1/books/{ISBN}  Updates book (200)" name="PUT /bookStore/v1/books/{ISBN}  Updates book (200)" time="0.642">
+    </testcase>
+    <testcase classname="PUT /bookStore/v1/books/{ISBN}  Doesn&apos;t update book if old == new ISBN (400)" name="PUT /bookStore/v1/books/{ISBN}  Doesn&apos;t update book if old == new ISBN (400)" time="0.385">
+    </testcase>
+    <testcase classname="PUT /bookStore/v1/books/{ISBN}  Doesn&apos;t update book if User not authorized (401)" name="PUT /bookStore/v1/books/{ISBN}  Doesn&apos;t update book if User not authorized (401)" time="0.18">
+    </testcase>
+    <testcase classname="PUT /bookStore/v1/books/{ISBN}  Doesn&apos;t update book if ISBN not exists (400)" name="PUT /bookStore/v1/books/{ISBN}  Doesn&apos;t update book if ISBN not exists (400)" time="0.141">
+    </testcase>
+    <testcase classname="DELETE /bookStore/v1/book  Deletes book (200)" name="DELETE /bookStore/v1/book  Deletes book (200)" time="0.391">
+    </testcase>
+    <testcase classname="DELETE /bookStore/v1/book  Doesn&apos;t delete book if it is not in the list (400)" name="DELETE /bookStore/v1/book  Doesn&apos;t delete book if it is not in the list (400)" time="0.391">
+    </testcase>
+    <testcase classname="DELETE /bookStore/v1/book Doesn&apos;t delete book if User not authorized (401)" name="DELETE /bookStore/v1/book Doesn&apos;t delete book if User not authorized (401)" time="0.168">
+    </testcase>
+    <testcase classname="GET /bookStore/v1/book Gets book (9781449325862) info (200)" name="GET /bookStore/v1/book Gets book (9781449325862) info (200)" time="0.188">
+    </testcase>
+    <testcase classname="GET /bookStore/v1/book Gets book (9781449331818) info (200)" name="GET /bookStore/v1/book Gets book (9781449331818) info (200)" time="0.14">
+    </testcase>
+    <testcase classname="GET /bookStore/v1/book Gets book (9781449337711) info (200)" name="GET /bookStore/v1/book Gets book (9781449337711) info (200)" time="0.132">
+    </testcase>
+    <testcase classname="GET /bookStore/v1/book Gets book (9781449365035) info (200)" name="GET /bookStore/v1/book Gets book (9781449365035) info (200)" time="0.141">
+    </testcase>
+    <testcase classname="GET /bookStore/v1/book Gets book (9781491904244) info (200)" name="GET /bookStore/v1/book Gets book (9781491904244) info (200)" time="0.142">
+    </testcase>
+    <testcase classname="GET /bookStore/v1/book Gets book (9781491950296) info (200)" name="GET /bookStore/v1/book Gets book (9781491950296) info (200)" time="0.134">
+    </testcase>
+    <testcase classname="GET /bookStore/v1/book Gets book (9781593275846) info (200)" name="GET /bookStore/v1/book Gets book (9781593275846) info (200)" time="0.138">
+    </testcase>
+    <testcase classname="GET /bookStore/v1/book Gets book (9781593277574) info (200)" name="GET /bookStore/v1/book Gets book (9781593277574) info (200)" time="0.136">
+    </testcase>
+    <testcase classname="GET /bookStore/v1/book Doesn&apos;t get books info if ISBN not exists (400)" name="GET /bookStore/v1/book Doesn&apos;t get books info if ISBN not exists (400)" time="0.133">
+    </testcase>
+  </testsuite>
+</testsuites>
